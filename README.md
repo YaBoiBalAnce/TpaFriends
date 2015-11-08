@@ -3,16 +3,16 @@ Tpa request plugin with support for Friends API
 
 Commands:
 
-'/tpa [name]'
+`/tpa [name]`
 
 descritpion: sends a tpa request to player (Note: if using friend api you can only send requests to friends)
 
-'/tpaccept'
+`/tpaccept`
 
 description: accepts any tpa requests.
 
 CONFIG:to not use friends api off
-'usefriendsapi: false'
+`usefriendsapi: false`
 
 TODO:
 - add permission
