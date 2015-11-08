@@ -1,0 +1,11 @@
+name: TPAFriends
+description: Tpa system with friends api support!
+author: BalAnce
+version: 0.1
+main: tpafriends\main
+api: 1.12.0
+commands:
+ tpa:
+  description: request to tp to player!
+ tpaccept:
+  description: accept tpa requests!
