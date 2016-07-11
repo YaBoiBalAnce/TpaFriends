@@ -18,8 +18,8 @@ class main extends PluginBase {
 		$this->getLogger()->info("Loaded!");
 		$this->friendsapi = $this->getServer()->getPluginManager()->getPlugin("Friends");
 		$this->config = new Config($this->getDataFolder()."config.yml",Config::YAML,array(
-				"usefriendapi" => true,
-				"tpdelay" => 5
+				"usefriendapi" => false,
+				"tpdelay" => 3
 		));
 		$this->config->save();
 	}
@@ -33,36 +33,42 @@ class main extends PluginBase {
 							$pos = $sender->getPosition();
 							$sender->sendMessage(TextFormat::GREEN."TPA request accepted!");
 							$requester = $this->getServer()->getPlayer($requester);
-							$requester->sendMessage("TPA request accepted teleporting in ".$this->config->get("tpdelay")." secs!");
+							$requester->sendMessage("§e========");
+							$requester->sendMessage("§b " . $sender->getName() . " §7has accepted your TPA Request!");
+							$requester->sendMessage("§7Teleporting...");
+							$requester->sendMessage("§e========");
 							$task = new teleport($this, $sender, $pos);
 							$this->getServer()->getScheduler()->scheduleDelayedTask($task, 20 * $this->getConfig()->get("tpdelay"));
 							$this->removeRequest($requester);
 						}
 					}
 				}else{
-					$sender->sendMessage("No pending tpa requests :(");
+					$sender->sendMessage("§e========");
+					$sender->sendMessage("§7No pending TPA requests!");
+					$sender->sendMessage("§e========");
 				}
 			break;
 			case "tpa":
 				if (isset($args[0])){
 					$requestp = $this->getServer()->getPlayer($args[0]);
 					if ($requestp instanceof Player){
-						if ($this->config->get("usefriendapi") == true){
-						if($this->friendsapi->isFriend($sender, $requestp->getName())){
 							$sender->sendMessage("Sent tpa request!");
 							$this->addRequest($sender, $requestp);
 						}else{
-							$sender->sendMessage("You are not friends with this player. :( \nDo /friend add [name] \nto request to be friends");
-						}
-						}else{
-							$sender->sendMessage("Sent tpa request!");
+							$sender->sendMessage("§e========");
+							$sender->sendMessage("§aSucessfully sent TPA Request!");
+							$sender->sendMessage("§e========");
 							$this->addRequest($sender, $requestp);
 						}
 					}else{
-						$sender->sendMessage("Player not online :(");
+						$sender->sendMessage("§e========");
+						$sender->sendMessage("§7That player is not online. Check §b/list§7!");
+						$sender->sendMessage("§e========");
 					}
 				}else{
-					$sender->sendMessage("USAGE: /tpa [name]");
+					$sender->sendMessage("§e========");
+					$sender->sendMessage("§4USAGE:§b /tpa [name]");
+					$sender->sendMessage("§e========");
 				}
 			break;
 			
@@ -71,12 +77,18 @@ class main extends PluginBase {
 	
 	public function teleportPlayer(Player $player,Position $pos){
 		$player->teleport($pos,$player->getYaw(),$player->getPitch());
-		$player->sendMessage("Teleported!");
+		$player->sendMessage("§e========");
+		$player->sendMessage("§aTeleported!");
+		$player->sendMessage("§e========");
 	}
 	
 	public function addRequest(Player $player,Player $request){
 		$this->requests[$player->getName()] = $request->getName();
-		$request->sendMessage(TextFormat::GREEN."Player: ".$player->getName()." has requested to teleport to you do /tpaccept to accept! \n or ignore to ignore");
+		$request->sendMessage("§e========");
+		$request->sendMessage("§b" . $player->getName() . " §7has requested to teleport to you!");
+		$request->sendMessage("§aACCEPT: §b/tpaccept");
+		$request->sendMessage("§4DENY: §bAt the moment you have to ignore, but in the future you will be able to do /tpdeny!");
+		$request->sendMessage("§e========");
 		$task = new removeRequest($this, $player);
 		$this->getServer()->getScheduler()->scheduleDelayedTask($task, 10*20);
 	}
