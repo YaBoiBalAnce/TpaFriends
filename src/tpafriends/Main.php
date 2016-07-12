@@ -10,7 +10,7 @@ use pocketmine\utils\TextFormat;
 use pocketmine\level\Position;
 use pocketmine\scheduler\CallbackTask;
 
-class main extends PluginBase {
+class Main extends PluginBase {
 	private $friendsapi;
 	private $config;
 	private $requests;
